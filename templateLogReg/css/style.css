@@ -41,7 +41,16 @@ h1 {
 /*-- main --*/
 
 .group-member {
-    
+
+}
+
+.title-holder {
+    padding: 20px;
+    color: #fff;
+}
+
+.ul {
+    list-style-type:none;
 }
 
 .group {
@@ -56,8 +65,10 @@ h1 {
     width: 50%;
 }
 .banner {
-    background: url(../images/banner.jpg)no-repeat 0px 0px;
+    background: rgb(58, 58, 58);
     background-size: cover;
+    border-radius: 20px;
+    border: 2px solid #ddd;
 }
 
 /*--signin-form--*/
@@ -71,10 +82,12 @@ h1 {
     width: 48%;
 }
 .signin-form {
-    background: url(../images/banner1.jpg)no-repeat 0px 0px;
+    background: rgb(58, 58, 58);
     background-size: cover;
     padding: 2em 2em;
-	text-align: center;
+    text-align: center;
+    border-radius: 20px;
+    border: 2px solid #ddd;
 }
 .signin-form h3 {
     font-size: 2em;

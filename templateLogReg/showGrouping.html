@@ -21,15 +21,21 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 </head>
 <body>
     
-    <h2>Groupings</h2>
+    <div class="title-holder">
+        <h1>Groupings</h1>
+    </div>
+    
 
     {% for group in groups %}
     <div class="group">
+        <h3>{{loop.index}}</h3>
         
         {% for person in group %}
         <div class="group">
-            <li class="group-member">{{ person.username }}</li>
-            <li class="group-member">{{ person.curriculum }}</li>
+            <ul>
+                <li class="group-member">Username: {{ person.username }}</li>
+                <li class="group-member">Curriculum: {{ person.curriculum }}</li>
+            </ul>
         </div>
         {% else %}
         <li>This would display if the 'item' collection were empty</li>

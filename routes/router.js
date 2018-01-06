@@ -79,8 +79,7 @@ router.post('/', function (req, res, next) {
       username: req.body.username,
       password: req.body.password,
       passwordConf: req.body.passwordConf,
-      curriculum: req.body.curriculum,
-      groupNumber: req.body.groupNumber
+      curriculum: req.body.curriculum
     }
 
     User.create(userData, function (error, user) {
