@@ -14,6 +14,16 @@ var UserSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  curriculum: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  groupNumber: {
+    type: Number,
+    required: true,
+    trim: true
+  },
   password: {
     type: String,
     required: true,

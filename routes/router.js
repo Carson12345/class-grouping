@@ -1,6 +1,56 @@
 var express = require('express');
 var router = express.Router();
+var app = express();
 var User = require('../models/user');
+var nunjucks = require( 'nunjucks' );
+var PATH_TO_TEMPLATES = '../templateLogReg/' ;
+var path = require("path");
+
+
+
+
+function arr_diff (a1, a2) {
+
+  var a = [], diff = [];
+
+  for (var i = 0; i < a1.length; i++) {
+      a[a1[i]] = true;
+  }
+
+  for (var i = 0; i < a2.length; i++) {
+      if (a[a2[i]]) {
+          delete a[a2[i]];
+      } else {
+          a[a2[i]] = true;
+      }
+  }
+
+  for (var k in a) {
+      diff.push(k);
+  }
+
+  return diff;
+}
+
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
 
 
 // GET route for reading data
@@ -29,6 +79,8 @@ router.post('/', function (req, res, next) {
       username: req.body.username,
       password: req.body.password,
       passwordConf: req.body.passwordConf,
+      curriculum: req.body.curriculum,
+      groupNumber: req.body.groupNumber
     }
 
     User.create(userData, function (error, user) {
@@ -60,6 +112,11 @@ router.post('/', function (req, res, next) {
 
 // GET route after registering
 router.get('/profile', function (req, res, next) {
+
+  User.find().exec(function (error, user) {
+    console.log(user);
+  }
+  );
   User.findById(req.session.userId)
     .exec(function (error, user) {
       if (error) {
@@ -74,6 +131,53 @@ router.get('/profile', function (req, res, next) {
         }
       }
     });
+});
+
+// GET route for showing all
+router.get('/list', function (req, res, next) {
+
+  User.find().exec(function (error, user) {
+
+    var groupSize = 3;
+    var maxNumberOfGroups = Math.floor(user.length/groupSize);
+    var noOfUsers = user.length;
+    var finalArr = shuffle(user);
+    var Groups = [];
+
+    //create groups
+    for (var i=0; i<maxNumberOfGroups; i++) {
+      Groups[i] = new Array (); 
+    }
+
+    var fulled = false;
+    var sorted = [];
+    var leftBehind = [];
+
+    for (var i=0; i<noOfUsers; i++) {
+      for (var y=0; y<maxNumberOfGroups; y++) {
+          if(!Groups[y].some( e => e['curriculum'] === finalArr[i].curriculum) && !Groups[y].some( e => e['email'] === finalArr[i].email) && Groups[y].length < groupSize ) {
+            Groups[y].push(finalArr[i]);
+            break;
+          }
+      }
+    }
+
+    //merge arrays
+    for (var i=0; i<maxNumberOfGroups; i++) {
+      sorted = sorted.concat(Groups[i]);
+    }
+
+    leftBehind = finalArr.filter(x => !sorted.includes(x));
+
+    Groups[Groups.length - 1] = Groups[Groups.length - 1].concat(leftBehind);
+    //return res.send(Groups);
+
+    var data = {
+      groups: Groups,
+    } ;
+    return res.render(path.resolve(__dirname, '../templateLogReg/showGrouping.html'), data ) ;
+  }
+  );
 });
 
 // GET for logout logout
@@ -91,3 +195,5 @@ router.get('/logout', function (req, res, next) {
 });
 
 module.exports = router;
+
+
