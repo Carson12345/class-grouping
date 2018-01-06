@@ -15,4 +15,4 @@ A simple example to show how authentication is implemented with Node.JS and Mong
 Check out my [post on medium.com](https://medium.com/@ddcreationstudi)
 
 You can find a more detailed tutorial at treehouse:
-<a href="http://referrals.trhou.se/danieldeutsch3" target="_blank"><img src="https://static.teamtreehouse.com/assets/content/referral-badge-grn.png" height="150"/></a>
+<a href="http://referrals.trhou.se/danieldeutsch3" target="_blank"><img src="https://static.teamtreehouse.com/assets/content/referral-badge-grn.png" height="150"/></a># class-grouping
