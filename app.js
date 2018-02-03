@@ -16,7 +16,7 @@ nunjucks.configure( PATH_TO_TEMPLATES, {
 
 
 //connect to MongoDB
-mongoose.connect('mongodb://localhost/testForAuth');
+mongoose.connect('mongodb://learningsystem:123@ds123258.mlab.com:23258/class');
 var db = mongoose.connection;
 
 //handle mongo error
