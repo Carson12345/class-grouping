@@ -31,7 +31,7 @@ return array;
 
 // GET route for reading data
 router.get('/', function (req, res, next) {
-  return res.sendFile(path.join(__dirname + '/view/index.html'));
+  return res.render(path.resolve(__dirname, '../view/login.html')) ;
 });
 
 
