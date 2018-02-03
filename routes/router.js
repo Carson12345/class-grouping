@@ -4,7 +4,7 @@ var app = express();
 var User = require('../models/user');
 var CM = require('../models/course_material');
 var nunjucks = require( 'nunjucks' );
-var PATH_TO_TEMPLATES = '../templateLogReg/' ;
+var PATH_TO_TEMPLATES = '../view/' ;
 var path = require("path");
 
 
@@ -31,7 +31,7 @@ return array;
 
 // GET route for reading data
 router.get('/', function (req, res, next) {
-  return res.sendFile(path.join(__dirname + '/templateLogReg/index.html'));
+  return res.sendFile(path.join(__dirname + '/view/index.html'));
 });
 
 
@@ -106,7 +106,7 @@ var data = {
 users: user,
 } ;
 console.log(data)
-return res.render(path.resolve(__dirname, '../templateLogReg/profile.html'), data ) ;
+return res.render(path.resolve(__dirname, '../view/profile.html'), data ) ;
 }
 }
 });
@@ -154,7 +154,7 @@ var data = {
 groups: Groups,
 } ;
 
-return res.render(path.resolve(__dirname, '../templateLogReg/showGrouping.html'), data ) ;
+return res.render(path.resolve(__dirname, '../view/showGrouping.html'), data ) ;
 }
 );
 });
@@ -182,7 +182,7 @@ router.get('/coursematerial', function (req, res, next) {
     c_material: c_m,
     } ;
   //console.log(c_material);
-return res.render(path.resolve(__dirname, '../templateLogReg/course_material.html'),data ) ;
+return res.render(path.resolve(__dirname, '../view/course_material.html'),data ) ;
 
   });
 });
