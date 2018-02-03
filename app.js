@@ -1,4 +1,5 @@
 var express = require('express');
+var expressLayouts = require('express-ejs-layouts');
 var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
@@ -7,10 +8,12 @@ var MongoStore = require('connect-mongo')(session);
 var nunjucks = require( 'nunjucks' ) ;
 var PATH_TO_TEMPLATES = '.' ;
 
+
 nunjucks.configure( PATH_TO_TEMPLATES, {
     autoescape: true,
     express: app
 });
+
 
 //connect to MongoDB
 mongoose.connect('mongodb://localhost/testForAuth');

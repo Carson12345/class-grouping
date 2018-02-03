@@ -21,29 +21,37 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 </head>
 <body>
     
-    <div class="title-holder">
-        <h1>Grouping</h1>
-        <div style="text-align: center; padding: 15px;">
+    <div class="banner">
+        <h1> Course Material </h1>
+    <div style="text-align:left; padding: 15px;">
                 <a class="button" href="/profile">Back</a>
             </div>
     </div>
-    
 
-    {% for group in groups %}
-    <div class="group">
-        <h3>{{loop.index}}</h3>
-        
-        {% for person in group %}
+
+    <div class="login-form">
+            <form action="/coursematerial" method="post">
+                <input type="text" name="title" placeholder="title" required="">
+                <input type="text" name="content" placeholder="content" required="">
+                <input type="submit" value="Add">
+            </form>
+        </div>
+
+    
+        {% for cmaterial in c_material %}
         <div class="group">
+            <h3>{{loop.index}}</h3>
             <ul>
-                <li class="group-member">Username: {{ person.username }}</li>
-                <li class="group-member">Curriculum: {{ person.curriculum }}</li>
+                    <li class="group-member">Title: {{ cmaterial.title }}</li>
+                    <li class="group-member">Content: {{ cmaterial.content }}</li>
             </ul>
+
+            <div style="text-align:center; padding: 15px;">
+                    <a class="button" href="/delete">Delete</a>
+            </div>
+        
         </div>
         {% endfor %}
-    
-    </div>
-    {% endfor %}
 
 
 </body>

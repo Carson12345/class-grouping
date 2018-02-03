@@ -13,17 +13,16 @@ var UserSchema = new mongoose.Schema({
     unique: true,
     required: true,
     trim: true
-  },
+  },  
   curriculum: {
     type: String,
     required: true,
     trim: true
   },
-  groupNumber: {
+   groupNumber: {
     type: Number,
-    required: true,
     trim: true
-  },
+   },
   password: {
     type: String,
     required: true,
@@ -70,4 +69,3 @@ UserSchema.pre('save', function (next) {
 
 var User = mongoose.model('User', UserSchema);
 module.exports = User;
-
