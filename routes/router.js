@@ -31,7 +31,7 @@ return array;
 
 // GET route for reading data
 router.get('/', function (req, res, next) {
-  return res.sendFile(path.join(__dirname + '/view/index.html'));
+  return res.render(path.resolve(__dirname, '../view/login.html')) ;
 });
 
 
@@ -63,7 +63,13 @@ if (error) {
 return next(error);
 } else {
 req.session.userId = user._id;
-return res.redirect('/profile');
+
+if (user.role == 'teacher') {
+  return res.redirect('/profile');
+} else {
+  return res.redirect('/profile');
+}
+
 }
 });
 
@@ -182,7 +188,7 @@ router.get('/coursematerial', function (req, res, next) {
     c_material: c_m,
     } ;
   //console.log(c_material);
-return res.render(path.resolve(__dirname, '../view/course_material.html'),data ) ;
+return res.render(path.resolve(__dirname, '../view/course_material_bar.html'),data ) ;
 
   });
 });
