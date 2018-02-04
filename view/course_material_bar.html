@@ -122,6 +122,19 @@
             
             </div>
             {% endfor %}
+
+            <form ref='uploadForm' 
+            id='uploadForm' 
+            action='http://localhost:3000/upload' 
+            method='post' 
+            encType="multipart/form-data">
+              <input type="file" name="sampleFile" />
+              <input type='submit' value='Upload!' />
+          </form>   
+
+          <div style="text-align:center; padding: 15px;">
+            <a class="button" href="/download">Download</a>
+          </div>
     
         </div>
 

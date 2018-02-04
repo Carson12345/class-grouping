@@ -30,7 +30,12 @@ var UserSchema = new mongoose.Schema({
   passwordConf: {
     type: String,
     required: true,
-  }
+  },
+
+  // role: {
+  //   type: String,
+  //   required: true,
+  // }
 });
 
 //authenticate input against database

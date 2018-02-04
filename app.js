@@ -7,6 +7,8 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var nunjucks = require( 'nunjucks' ) ;
 var PATH_TO_TEMPLATES = '.' ;
+const fileUpload = require('express-fileupload');
+
 
 
 nunjucks.configure( PATH_TO_TEMPLATES, {
@@ -38,7 +40,7 @@ app.use(session({
 // parse incoming requests
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(fileUpload());
 
 // serve static files from template
 app.use(express.static(__dirname + '/view'));
@@ -66,3 +68,4 @@ app.use(function (err, req, res, next) {
 app.listen(process.env.PORT || 3000, function(){
   console.log('Express app listening on port 3000');
 });
+
