@@ -48,14 +48,16 @@ return next(err);
 if (req.body.email &&
 req.body.username &&
 req.body.password &&
-req.body.passwordConf) {
+req.body.passwordConf&&
+req.body.role) {
 
 var userData = {
 email: req.body.email,
 username: req.body.username,
 password: req.body.password,
 passwordConf: req.body.passwordConf,
-curriculum: req.body.curriculum
+curriculum: req.body.curriculum,
+role:req.body.role
 }
 
 User.create(userData, function (error, user) {
@@ -65,9 +67,9 @@ return next(error);
 req.session.userId = user._id;
 
 if (user.role == 'teacher') {
-  return res.redirect('/profile');
+  return res.redirect('/profile_t');
 } else {
-  return res.redirect('/profile');
+  return res.redirect('/profile_s');
 }
 
 }
@@ -81,7 +83,11 @@ err.status = 401;
 return next(err);
 } else {
 req.session.userId = user._id;
-return res.redirect('/profile');
+if (user.role == 'teacher') {
+  return res.redirect('/profile_t');
+} else {
+  return res.redirect('/profile_s');
+}
 }
 });
 } else {
@@ -92,7 +98,7 @@ return next(err);
 })
 
 // GET route after registering
-router.get('/profile', function (req, res, next) {
+router.get('/profile_s', function (req, res, next) {
 
 User.find().exec(function (error, user) {
 //console.log(user);
@@ -112,11 +118,39 @@ var data = {
 users: user,
 } ;
 console.log(data)
-return res.render(path.resolve(__dirname, '../view/profile.html'), data ) ;
+return res.render(path.resolve(__dirname, '../view/profile_student.html'), data ) ;
 }
 }
 });
 });
+
+// GET route after registering
+router.get('/profile_t', function (req, res, next) {
+
+  User.find().exec(function (error, user) {
+  //console.log(user);
+  }
+  );
+  User.findById(req.session.userId)
+  .exec(function (error, user) {
+  if (error) {
+  return next(error);
+  } else {
+  if (user === null) {
+  var err = new Error('Not authorized! Go back!');
+  err.status = 400;
+  return next(err);
+  } else {
+  var data = {
+  users: user,
+  } ;
+  console.log(data)
+  return res.render(path.resolve(__dirname, '../view/profile_teacher.html'), data ) ;
+  }
+  }
+  });
+  });
+
 
 // GET route for showing all
 router.get('/list', function (req, res, next) {
