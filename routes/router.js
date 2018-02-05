@@ -67,9 +67,9 @@ return next(error);
 req.session.userId = user._id;
 
 if (user.role == 'teacher') {
-  return res.redirect('/profile_t');
+  return res.redirect('/profile_teacher');
 } else {
-  return res.redirect('/profile_s');
+  return res.redirect('/profile_student');
 }
 
 }
@@ -84,9 +84,9 @@ return next(err);
 } else {
 req.session.userId = user._id;
 if (user.role == 'teacher') {
-  return res.redirect('/profile_t');
+  return res.redirect('/profile_teacher');
 } else {
-  return res.redirect('/profile_s');
+  return res.redirect('/profile_student');
 }
 }
 });
@@ -98,7 +98,7 @@ return next(err);
 })
 
 // GET route after registering
-router.get('/profile_s', function (req, res, next) {
+router.get('/profile_student', function (req, res, next) {
 
 User.find().exec(function (error, user) {
 //console.log(user);
@@ -125,7 +125,7 @@ return res.render(path.resolve(__dirname, '../view/profile_student.html'), data 
 });
 
 // GET route after registering
-router.get('/profile_t', function (req, res, next) {
+router.get('/profile_teacher', function (req, res, next) {
 
   User.find().exec(function (error, user) {
   //console.log(user);
@@ -153,9 +153,9 @@ router.get('/profile_t', function (req, res, next) {
 
 
 // GET route for showing all
-router.get('/list', function (req, res, next) {
+router.get('/list_student', function (req, res, next) {
 
-User.find().exec(function (error, user) {
+User.find({role:"student"}).exec(function (error, user) {
 
 var groupSize = 3;
 var maxNumberOfGroups = Math.floor(user.length/groupSize);
@@ -194,11 +194,60 @@ var data = {
 groups: Groups,
 } ;
 
-return res.render(path.resolve(__dirname, '../view/showGrouping.html'), data ) ;
+return res.render(path.resolve(__dirname, '../view/showGrouping_student.html'), data ) ;
 }
 );
 });
 
+// GET route for showing all
+router.get('/list_teacher', function (req, res, next) {
+
+  User.find({role:"student"}).exec(function (error, user) {
+  
+  var groupSize = 3;
+  var maxNumberOfGroups = Math.floor(user.length/groupSize);
+  var noOfUsers = user.length;
+  var finalArr = shuffle(user);
+  var Groups = [];
+  
+  //create groups
+  for (var i=0; i<maxNumberOfGroups; i++) {
+  Groups[i] = new Array ();
+  }
+  
+  //var fulled = false;
+  var sorted = [];
+  var leftBehind = [];
+  
+  for (var i=0; i<noOfUsers; i++) {
+  for (var y=0; y<maxNumberOfGroups; y++) {
+  if(!Groups[y].some( e => e['curriculum'] === finalArr[i].curriculum) && Groups[y].length < groupSize ) {
+  Groups[y].push(finalArr[i]);
+  break;
+  }
+  }
+  }
+  
+  //merge arrays
+  for (var i=0; i<maxNumberOfGroups; i++) {
+  sorted = sorted.concat(Groups[i]);
+  }
+  
+  leftBehind = finalArr.filter(x => !sorted.includes(x));
+  
+  Groups[Groups.length - 1] = Groups[Groups.length - 1].concat(leftBehind);
+  
+  var data = {
+  groups: Groups,
+  } ;
+  
+  return res.render(path.resolve(__dirname, '../view/showGrouping_teacher.html'), data ) ;
+  }
+  );
+  });
+
+
+  
 // GET for logout logout
 router.get('/logout', function (req, res, next) {
 if (req.session) {
@@ -214,7 +263,7 @@ return res.redirect('/');
 });
 
 // Get for course material
-router.get('/coursematerial', function (req, res, next) {
+router.get('/coursematerial_s', function (req, res, next) {
   CM.find({}, function(err, cms) {
     if (err) throw err;
     var c_m = cms;
@@ -222,14 +271,25 @@ router.get('/coursematerial', function (req, res, next) {
     c_material: c_m,
     } ;
   //console.log(c_material);
-return res.render(path.resolve(__dirname, '../view/course_material_bar.html'),data ) ;
+return res.render(path.resolve(__dirname, '../view/course_material_s.html'),data ) ;
+  });
+});
 
+router.get('/coursematerial_t', function (req, res, next) {
+  CM.find({}, function(err, cms) {
+    if (err) throw err;
+    var c_m = cms;
+  var data = {
+    c_material: c_m,
+    } ;
+  //console.log(c_material);
+return res.render(path.resolve(__dirname, '../view/course_material_t.html'),data ) ;
   });
 });
 
 
 //POST route for updating data
-router.post('/coursematerial', function (req, res, next) {
+router.post('/coursematerial_t', function (req, res, next) {
 
 if (req.body.title &&
 req.body.content ) {

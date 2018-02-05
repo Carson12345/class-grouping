@@ -20,9 +20,7 @@
             <!-- Sidebar Holder -->
             <nav id="sidebar">
                 <div class="sidebar-header">
-                    <h3>Teacher</h3>
-                    <h3>Username: {{users.username }}</h3>
-                    <h3>Curriculum: {{users.curriculum}}</h3>
+                    <h3>Team Learner</h3>
                 </div>
 
                 <ul class="list-unstyled components">
@@ -30,8 +28,8 @@
                     <li class="active">
                         <a href="#lesson1Submenu" data-toggle="collapse" aria-expanded="false">Lesson 1</a>
                         <ul class="collapse list-unstyled" id="lesson1Submenu">
-                            <li><a href="/list_teacher">Grouping</a></li>
-                            <li><a href="/coursematerial_teacher">Course Material</a></li>
+                            <li><a href="/list">Grouping</a></li>
+                            <li><a href="/coursematerial_s">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="#">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -41,8 +39,8 @@
                     <li class="active">
                         <a href="#lesson2Submenu" data-toggle="collapse" aria-expanded="false">Lesson 2</a>
                         <ul class="collapse list-unstyled" id="lesson2Submenu">
-                            <li><a href="/list_teacher">Grouping</a></li>
-                            <li><a href="/coursematerial_teacher">Course Material</a></li>
+                            <li><a href="/list">Grouping</a></li>
+                            <li><a href="/coursematerial_s">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="#">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -52,8 +50,8 @@
                     <li class="active">
                         <a href="#lesson3Submenu" data-toggle="collapse" aria-expanded="false">Lesson 3</a>
                         <ul class="collapse list-unstyled" id="lesson3Submenu">
-                            <li><a href="/list_teacher">Grouping</a></li>
-                            <li><a href="/coursematerial_teacher">Course Material</a></li>
+                            <li><a href="/list">Grouping</a></li>
+                            <li><a href="/coursematerial_s">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="#">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -75,45 +73,61 @@
             </nav>
 
             <!-- Page Content Holder -->
-            <div id="content">
+           <!-- Page Content Holder -->
+           <div id="content">
 
-                <nav class="navbar navbar-default">
-                    <div class="container-fluid">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
 
-                        <div class="navbar-header">
-                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
-                                <i class="glyphicon glyphicon-align-left"></i>
-                                <span>Open</span>
-                            </button>
-                        </div>
-
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav navbar-right">
-                                <li><a href="#">Page</a></li>
-                                <li><a href="#">Page</a></li>
-                                <li><a href="#">Page</a></li>
-                                <li><a href="#">Page</a></li>
-                            </ul>
-                        </div>
+                    <div class="navbar-header">
+                        <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                            <i class="glyphicon glyphicon-align-left"></i>
+                            <span>Open</span>
+                        </button>
                     </div>
-                </nav>
-               
-                <div class="title-holder">
-                    <h1>Teacher Page</h1>
+
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#">Page</a></li>
+                            <li><a href="#">Page</a></li>
+                            <li><a href="#">Page</a></li>
+                            <li><a href="#">Page</a></li>
+                        </ul>
+                    </div>
                 </div>
-                
-                
-                <div class="banner">
-                    <username> 
-                        <ul>Username: {{users.username }} </ul> 
-                        <ul>Curriculum: {{users.curriculum}}</ul>
-                    </username>
-                </div>
+            </nav>
+            
+    
         
+            {% for cmaterial in c_material %}
+            <div class="group">
+                <h3>{{loop.index}}</h3>
+                <ul>
+                        <li class="group-member">Title: {{ cmaterial.title }}</li>
+                        <li class="group-member">Content: {{ cmaterial.content }}</li>
+                </ul>
+    
+                <div style="text-align:center; padding: 15px;">
+                        <a class="button" href="/delete">Delete</a>
+                </div>
+            
             </div>
+            {% endfor %}
+
+            <form ref='uploadForm' 
+            id='uploadForm' 
+            action='http://localhost:3000/upload' 
+            method='post' 
+            encType="multipart/form-data">
+              <input type="file" name="sampleFile" />
+              <input type='submit' value='Upload!' />
+          </form>   
+
+          <div style="text-align:center; padding: 15px;">
+            <a class="button" href="/download">Download</a>
+          </div>
+    
         </div>
-
-
 
 
 
