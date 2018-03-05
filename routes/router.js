@@ -385,11 +385,11 @@ router.post('/forum_teacher', function (req, res, next) {
   router.post('/forum_student', function (req, res, next) {
     
     if (req.body.group && req.body.content) {
-    console.log('yes i love u');
     var material = Discussion({
     group: req.body.group,
     content: req.body.content
     });
+    
     
     material.save(function(){
       return res.redirect('/forum_student');
