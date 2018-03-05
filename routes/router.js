@@ -91,11 +91,11 @@ return next(error);
 } else {
 req.session.userId = user._id;
 
-if (user.role == 'teacher') {
-  return res.redirect('/profile_teacher');
-} else {
-  return res.redirect('/profile_student');
-}
+  if (user.role == 'teacher') {
+    return res.redirect('/profile_teacher');
+  } else {
+    return res.redirect('/profile_student');
+  }
 
 }
 });
@@ -107,7 +107,9 @@ var err = new Error('Wrong email or password.');
 err.status = 401;
 return next(err);
 } else {
+  console.log(user);
 req.session.userId = user._id;
+req.session.username = user.username;
 if (user.role == 'teacher') {
   return res.redirect('/profile_teacher');
 } else {
@@ -124,6 +126,8 @@ return next(err);
 
 // GET route after registering
 router.get('/profile_student', function (req, res, next) {
+  // console.log(req);
+  console.log(req.session);
 
 User.find().exec(function (error, user) {
 //console.log(user);
@@ -131,17 +135,17 @@ User.find().exec(function (error, user) {
 );
 User.findById(req.session.userId)
 .exec(function (error, user) {
-if (error) {
-return next(error);
-} else {
-if (user === null) {
-var err = new Error('Not authorized! Go back!');
-err.status = 400;
-return next(err);
-} else {
-var data = {
-users: user,
-} ;
+  if (error) {
+    return next(error);
+  } else {
+  if (user === null) {
+    var err = new Error('Not authorized! Go back!');
+    err.status = 400;
+    return next(err);
+  } else {
+  var data = {
+    users: user,
+  } ;
 return res.render(path.resolve(__dirname, '../view/profile_student.html'), data ) ;
 }
 }
@@ -157,6 +161,7 @@ router.get('/profile_teacher', function (req, res, next) {
   );
   User.findById(req.session.userId)
   .exec(function (error, user) {
+    console.log(user);
   if (error) {
   return next(error);
   } else {
@@ -277,10 +282,10 @@ router.get('/list_teacher', function (req, res, next) {
 // GET for logout logout
 router.get('/logout', function (req, res, next) {
 if (req.session) {
-// delete session object
-req.session.destroy(function (err) {
-if (err) {
-return next(err);
+  // delete session object
+  req.session.destroy(function (err) {
+  if (err) {
+  return next(err);
 } else {
 return res.redirect('/');
 }
@@ -434,12 +439,12 @@ router.get('/quizIndex', function(req, res) {
 
   // load the index.html template
   fs.readFile(path.resolve(__dirname, '../view/index_Q.html'), function(err, data) {
+
     if(err) throw err;
     
     // populate it with templated questions from the node-quizzer module
     var compiled = _.template(data.toString());
-    console.log(compiled({ availableQuizzes: list }));
-    res.send(compiled({ availableQuizzes: list }));
+    res.send(compiled({ availableQuizzes: list, username: req.session.username }));
   });
 });
 
