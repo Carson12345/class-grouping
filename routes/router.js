@@ -3,9 +3,33 @@ var router = express.Router();
 var app = express();
 var User = require('../models/user');
 var CM = require('../models/course_material');
+var Discussion = require('../models/discussion');
 var nunjucks = require( 'nunjucks' );
 var PATH_TO_TEMPLATES = '../view/' ;
 var path = require("path");
+
+var
+  
+  url = require('url'),
+  fs = require('fs'),
+  path = require('path'),
+  quizzer = require('node-quizzer'),
+  _ = require('underscore-node'),
+  getQuiz = function(method, req) {
+    var urlParts = url.parse(req.url, true),
+      query = urlParts.query,
+
+      // generate random quiz
+      quiz = quizzer[method]({
+        uname: query.fullname,
+        uemail: query.email,
+        name: query.quiz,
+        count: parseInt(query.count),
+        time: parseInt(query.time),
+        perc: parseInt(query.perc)
+      });
+    return quiz;
+  };
 
 
 
@@ -59,6 +83,7 @@ passwordConf: req.body.passwordConf,
 curriculum: req.body.curriculum,
 role:req.body.role
 }
+
 
 User.create(userData, function (error, user) {
 if (error) {
@@ -117,7 +142,6 @@ return next(err);
 var data = {
 users: user,
 } ;
-console.log(data)
 return res.render(path.resolve(__dirname, '../view/profile_student.html'), data ) ;
 }
 }
@@ -144,7 +168,7 @@ router.get('/profile_teacher', function (req, res, next) {
   var data = {
   users: user,
   } ;
-  console.log(data)
+  //console.log(data)
   return res.render(path.resolve(__dirname, '../view/profile_teacher.html'), data ) ;
   }
   }
@@ -240,6 +264,8 @@ router.get('/list_teacher', function (req, res, next) {
   var data = {
   groups: Groups,
   } ;
+
+  console.log(Groups);
   
   return res.render(path.resolve(__dirname, '../view/showGrouping_teacher.html'), data ) ;
   }
@@ -263,7 +289,7 @@ return res.redirect('/');
 });
 
 // Get for course material
-router.get('/coursematerial_s', function (req, res, next) {
+router.get('/coursematerial_student', function (req, res, next) {
   CM.find({}, function(err, cms) {
     if (err) throw err;
     var c_m = cms;
@@ -271,11 +297,11 @@ router.get('/coursematerial_s', function (req, res, next) {
     c_material: c_m,
     } ;
   //console.log(c_material);
-return res.render(path.resolve(__dirname, '../view/course_material_s.html'),data ) ;
+return res.render(path.resolve(__dirname, '../view/course_material_student.html'),data ) ;
   });
 });
 
-router.get('/coursematerial_t', function (req, res, next) {
+router.get('/coursematerial_teacher', function (req, res, next) {
   CM.find({}, function(err, cms) {
     if (err) throw err;
     var c_m = cms;
@@ -283,13 +309,13 @@ router.get('/coursematerial_t', function (req, res, next) {
     c_material: c_m,
     } ;
   //console.log(c_material);
-return res.render(path.resolve(__dirname, '../view/course_material_t.html'),data ) ;
+return res.render(path.resolve(__dirname, '../view/course_material_teacher.html'),data ) ;
   });
 });
 
 
 //POST route for updating data
-router.post('/coursematerial_t', function (req, res, next) {
+router.post('/coursematerial_teacher', function (req, res, next) {
 
 if (req.body.title &&
 req.body.content ) {
@@ -300,7 +326,7 @@ content: req.body.content,
 });
 
 material.save(function(){
-  return res.redirect('/profile');
+  return res.redirect('/coursematerial_teacher');
   console.log('material saved');
 });
 
@@ -338,6 +364,142 @@ router.get('/download', function(req, res){
   var file = path.resolve(__dirname, '../download/jjj.jpg');
   res.download(file); // Set disposition and send it.
 });
+
+
+router.post('/forum_teacher', function (req, res, next) {
+  if (req.body.question) {
+    console.log('gggggg');
+  var material = Discussion({
+  question: req.body.question
+  
+  });
+  
+  material.save(function(){
+    return res.redirect('/profile_teacher');
+    console.log('material saved');
+  });
+  
+  }
+  });
+
+  router.post('/forum_student', function (req, res, next) {
+    
+    if (req.body.group && req.body.content) {
+    console.log('yes i love u');
+    var material = Discussion({
+    group: req.body.group,
+    content: req.body.content
+    });
+    
+    material.save(function(){
+      return res.redirect('/forum_student');
+    });
+    
+    }
+    });
+  
+
+
+router.get('/forum_teacher', function (req, res, next) {
+  Discussion.find({}, function(err, discussions) {
+    if (err) throw err;
+    var dcs = discussions;
+  var data = {
+    discussion: dcs,
+    } ;
+  //console.log(c_material);
+return res.render(path.resolve(__dirname, '../view/forum_teacher.html'),data ) ;
+  });
+});
+
+router.get('/forum_student', function (req, res, next) {
+  Discussion.find({}, function(err, discussions) {
+    if (err) throw err;
+    var dcs = discussions;
+  var data = {
+    discussion: dcs,
+    } ;
+  //console.log(c_material);
+return res.render(path.resolve(__dirname, '../view/forum_student.html'),data ) ;
+  });
+});
+
+
+///////////////////////////////////////////////////////////////////
+
+
+
+router.get('/quizIndex', function(req, res) {
+  var list = quizzer.getCategories();
+
+  // load the index.html template
+  fs.readFile(path.resolve(__dirname, '../view/index_Q.html'), function(err, data) {
+    if(err) throw err;
+    
+    // populate it with templated questions from the node-quizzer module
+    var compiled = _.template(data.toString());
+    res.send(compiled({ availableQuizzes: list }));
+  });
+});
+
+
+router.get('/quiz', function(req, res) {
+  var quiz = getQuiz('generate', req);
+
+  // load the quiz.html template
+  fs.readFile(path.resolve(__dirname, '../view/quiz.html'), function(err, data) {
+    if(err) throw err;
+
+    // populate it with templated questions from the node-quizzer module
+    var compiled = _.template(data.toString());
+    res.send(compiled({ quiz: quiz }));
+  });
+});
+
+router.get('/tokenize', function(req, res) {
+  var quiz = getQuiz('tokenize', req),
+    tokenUrl = req.protocol + '://' + req.get('host') + "/quiz/" + quiz.quid;
+
+  res.set('Content-Type', 'text/plain');
+  res.send(tokenUrl);
+});
+
+router.get('/quiz/:id', function(req, res) {
+  var quiz = quizzer.fromToken(req.params.id);
+
+  // load the quiz.html template
+  if(quiz) {
+    fs.readFile(path.resolve(__dirname, '../view/quiz.html'), function(err, data) {
+      if(err) throw err;
+
+      // populate it with templated questions from the node-quizzer module
+      var compiled = _.template(data.toString());
+      res.send(compiled({ quiz: quiz }));
+    });
+  } else {
+    res.send("This token has expired!");
+  }
+})
+
+router.get('/review', function(req, res) {
+  var urlParts = url.parse(req.url, true),
+    query = urlParts.query,
+    results = quizzer.evaluate(query);
+
+  // load the review.html template
+  fs.readFile(path.resolve(__dirname, '../view/review.html'), function(err, data) {
+    if(err) throw err;
+
+    // populate it with templated questions from the node-quizzer module
+    var compiled = _.template(data.toString());
+    res.send(compiled({ results: results }));
+  });
+});
+
+
+
+
+
 
 
 module.exports = router;

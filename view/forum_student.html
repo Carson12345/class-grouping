@@ -29,7 +29,7 @@
                         <a href="#lesson1Submenu" data-toggle="collapse" aria-expanded="false">Lesson 1</a>
                         <ul class="collapse list-unstyled" id="lesson1Submenu">
                             <li><a href="/list">Grouping</a></li>
-                            <li><a href="/coursematerial_s">Course Material</a></li>
+                            <li><a href="/coursematerial_teacher">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="#">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -40,7 +40,7 @@
                         <a href="#lesson2Submenu" data-toggle="collapse" aria-expanded="false">Lesson 2</a>
                         <ul class="collapse list-unstyled" id="lesson2Submenu">
                             <li><a href="/list">Grouping</a></li>
-                            <li><a href="/coursematerial_s">Course Material</a></li>
+                            <li><a href="/coursematerial_teacher">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="#">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -51,7 +51,7 @@
                         <a href="#lesson3Submenu" data-toggle="collapse" aria-expanded="false">Lesson 3</a>
                         <ul class="collapse list-unstyled" id="lesson3Submenu">
                             <li><a href="/list">Grouping</a></li>
-                            <li><a href="/coursematerial_s">Course Material</a></li>
+                            <li><a href="/coursematerial_teacher">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="#">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -97,24 +97,27 @@
                 </div>
             </nav>
             
-    
         
-            {% for cmaterial in c_material %}
+            {% for ddd in discussion %}
             <div class="group">
                 <h3>{{loop.index}}</h3>
                 <ul>
-                        <li class="group-member">Title: {{ cmaterial.title }}</li>
-                        <li class="group-member">Content: {{ cmaterial.content }}</li>
+                        <li class="group-member">Question: {{ ddd.question}}</li>
                 </ul>
-    
-                <div style="text-align:center; padding: 15px;">
-                        <a class="button" href="/delete">Delete</a>
-                </div>
-            
+
+                <form action="/forum_student" method="post">
+                    <input type="text" name="group" placeholder="group" required="">
+                    <input type="text" name="content" placeholder="content" required="">
+                    <input type="submit" value="Add">
+                </form>
+                <ul>
+                    <li class="group-member">Group: {{ ddd.group}}</li>
+                    <li class="group-member">Content: {{ ddd.content}}</li>
+                </ul>
             </div>
             {% endfor %}
 
-            <form ref='uploadForm' 
+            <!-- <form ref='uploadForm' 
             id='uploadForm' 
             action='http://localhost:3000/upload' 
             method='post' 
@@ -127,7 +130,7 @@
             <a class="button" href="/download">Download</a>
           </div>
     
-        </div>
+        </div> -->
 
 
 

@@ -29,7 +29,7 @@
                         <a href="#lesson1Submenu" data-toggle="collapse" aria-expanded="false">Lesson 1</a>
                         <ul class="collapse list-unstyled" id="lesson1Submenu">
                             <li><a href="/list">Grouping</a></li>
-                            <li><a href="/coursematerial_t">Course Material</a></li>
+                            <li><a href="/coursematerial_teacher">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="#">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -40,7 +40,7 @@
                         <a href="#lesson2Submenu" data-toggle="collapse" aria-expanded="false">Lesson 2</a>
                         <ul class="collapse list-unstyled" id="lesson2Submenu">
                             <li><a href="/list">Grouping</a></li>
-                            <li><a href="/coursematerial_t">Course Material</a></li>
+                            <li><a href="/coursematerial_teacher">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="#">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -51,7 +51,7 @@
                         <a href="#lesson3Submenu" data-toggle="collapse" aria-expanded="false">Lesson 3</a>
                         <ul class="collapse list-unstyled" id="lesson3Submenu">
                             <li><a href="/list">Grouping</a></li>
-                            <li><a href="/coursematerial_t">Course Material</a></li>
+                            <li><a href="/coursematerial_teacher">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="#">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -99,21 +99,19 @@
             
             <div class="signin-form profile">
                <div class="login-form">
-                <form action="/coursematerial" method="post">
-                    <input type="text" name="title" placeholder="title" required="">
-                    <input type="text" name="content" placeholder="content" required="">
+                <form action="/forum_teacher" method="post">
+                    <input type="text" name="question" placeholder="question" required="">
                     <input type="submit" value="Add">
                 </form>
               </div>
             </div>
     
         
-            {% for cmaterial in c_material %}
+            {% for ddd in discussion %}
             <div class="group">
                 <h3>{{loop.index}}</h3>
                 <ul>
-                        <li class="group-member">GGTitle: {{ cmaterial.title }}</li>
-                        <li class="group-member">Content: {{ cmaterial.content }}</li>
+                        <li class="group-member">Question: {{ ddd.question}}</li>
                 </ul>
     
                 <div style="text-align:center; padding: 15px;">
@@ -122,22 +120,6 @@
             
             </div>
             {% endfor %}
-
-            <form ref='uploadForm' 
-            id='uploadForm' 
-            action='http://localhost:3000/upload' 
-            method='post' 
-            encType="multipart/form-data">
-              <input type="file" name="sampleFile" />
-              <input type='submit' value='Upload!' />
-          </form>   
-
-          <div style="text-align:center; padding: 15px;">
-            <a class="button" href="/download">Download</a>
-          </div>
-    
-        </div>
-
 
 
         <!-- jQuery CDN -->

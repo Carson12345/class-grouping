@@ -28,8 +28,8 @@
                     <li class="active">
                         <a href="#lesson1Submenu" data-toggle="collapse" aria-expanded="false">Lesson 1</a>
                         <ul class="collapse list-unstyled" id="lesson1Submenu">
-                            <li><a href="/list_student">Grouping</a></li>
-                            <li><a href="/coursematerial_student">Course Material</a></li>
+                            <li><a href="/list">Grouping</a></li>
+                            <li><a href="/coursematerial_teacher">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="/forum_teacher">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -39,8 +39,8 @@
                     <li class="active">
                         <a href="#lesson2Submenu" data-toggle="collapse" aria-expanded="false">Lesson 2</a>
                         <ul class="collapse list-unstyled" id="lesson2Submenu">
-                            <li><a href="/list_student">Grouping</a></li>
-                            <li><a href="/coursematerial_student">Course Material</a></li>
+                            <li><a href="/list">Grouping</a></li>
+                            <li><a href="/coursematerial_teacher">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="/forum_teacher">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -50,8 +50,8 @@
                     <li class="active">
                         <a href="#lesson3Submenu" data-toggle="collapse" aria-expanded="false">Lesson 3</a>
                         <ul class="collapse list-unstyled" id="lesson3Submenu">
-                            <li><a href="/list_student">Grouping</a></li>
-                            <li><a href="/coursematerial_student">Course Material</a></li>
+                            <li><a href="/list">Grouping</a></li>
+                            <li><a href="/coursematerial_teacher">Course Material</a></li>
                             <li><a href="#">Pre-class evaluation</a></li>
                             <li><a href="/forum_teacher">Discussion</a></li>
                             <li><a href="#">Peer evaluation</a></li>
@@ -73,50 +73,70 @@
             </nav>
 
             <!-- Page Content Holder -->
-            <div id="content">
+           <!-- Page Content Holder -->
+           <div id="content">
 
-                <nav class="navbar navbar-default">
-                    <div class="container-fluid">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
 
-                        <div class="navbar-header">
-                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
-                                <i class="glyphicon glyphicon-align-left"></i>
-                                <span>Open</span>
-                            </button>
-                        </div>
+                    <div class="navbar-header">
+                        <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                            <i class="glyphicon glyphicon-align-left"></i>
+                            <span>Open</span>
+                        </button>
+                    </div>
 
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            <ul class="nav navbar-nav navbar-right">
-                                <li><a href="#">Page</a></li>
-                                <li><a href="#">Page</a></li>
-                                <li><a href="#">Page</a></li>
-                                <li><a href="#">Page</a></li>
-                            </ul>
-                        </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#">Page</a></li>
+                            <li><a href="#">Page</a></li>
+                            <li><a href="#">Page</a></li>
+                            <li><a href="#">Page</a></li>
+                        </ul>
                     </div>
-                </nav>
-               
-                <div class="title-holder">
-                    <h1>Grouping</h1>
-                    <div style="text-align: center; padding: 15px;">
-                    <a class="button" href="/profile_teacher">Back</a>
-                    </div>
-                    </div>
-                    
-                    {% for group in groups %}
-                    <div class="group">
-                    <h3>{{loop.index}}</h3>
-                    {% for person in group %}
-                    <div class="group">
-                    <ul>
-                    <li class="group-member">Username: {{ person.username }}</li>
-                    <li class="group-member">Curriculum: {{ person.curriculum }}</li>
-                    </ul>
-                    </div>
-                    {% endfor %}
-                    </div>
-                    {% endfor %}
+                </div>
+            </nav>
+            
+            <div class="signin-form profile">
+               <div class="login-form">
+                <form action="/coursematerial_teacher" method="post">
+                    <input type="text" name="title" placeholder="title" required="">
+                    <input type="text" name="content" placeholder="content" required="">
+                    <input type="submit" value="Add">
+                </form>
+              </div>
+            </div>
+    
+        
+            {% for cmaterial in c_material %}
+            <div class="group">
+                <h3>{{loop.index}}</h3>
+                <ul>
+                        <li class="group-member">GGTitle: {{ cmaterial.title }}</li>
+                        <li class="group-member">Content: {{ cmaterial.content }}</li>
+                </ul>
+    
+                <div style="text-align:center; padding: 15px;">
+                        <a class="button" href="/delete">Delete</a>
+                </div>
+            
+            </div>
+            {% endfor %}
 
+            <form ref='uploadForm' 
+            id='uploadForm' 
+            action='http://localhost:3000/upload' 
+            method='post' 
+            encType="multipart/form-data">
+              <input type="file" name="sampleFile" />
+              <input type='submit' value='Upload!' />
+          </form>   
+
+          <div style="text-align:center; padding: 15px;">
+            <a class="button" href="/download">Download</a>
+          </div>
+    
+        </div>
 
 
 

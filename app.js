@@ -8,8 +8,30 @@ var MongoStore = require('connect-mongo')(session);
 var nunjucks = require( 'nunjucks' ) ;
 var PATH_TO_TEMPLATES = '.' ;
 const fileUpload = require('express-fileupload');
+var mongo = require('mongodb');
+var
+  
+  url = require('url'),
+  fs = require('fs'),
+  path = require('path'),
+  quizzer = require('node-quizzer'),
+  _ = require('underscore-node'),
+  getQuiz = function(method, req) {
+    var urlParts = url.parse(req.url, true),
+      query = urlParts.query,
 
+      // generate random quiz
+      quiz = quizzer[method]({
+        uname: query.fullname,
+        uemail: query.email,
+        name: query.quiz,
+        count: parseInt(query.count),
+        time: parseInt(query.time),
+        perc: parseInt(query.perc)
+      });
 
+    return quiz;
+  };
 
 nunjucks.configure( PATH_TO_TEMPLATES, {
     autoescape: true,
@@ -21,11 +43,14 @@ nunjucks.configure( PATH_TO_TEMPLATES, {
 mongoose.connect('mongodb://learningsystem:123@ds123258.mlab.com:23258/class');
 var db = mongoose.connection;
 
+
+
 //handle mongo error
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function () {
   // we're connected!
 });
+
 
 //use sessions for tracking logins
 app.use(session({
