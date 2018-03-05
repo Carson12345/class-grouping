@@ -438,6 +438,7 @@ router.get('/quizIndex', function(req, res) {
     
     // populate it with templated questions from the node-quizzer module
     var compiled = _.template(data.toString());
+    console.log(compiled({ availableQuizzes: list }));
     res.send(compiled({ availableQuizzes: list }));
   });
 });
